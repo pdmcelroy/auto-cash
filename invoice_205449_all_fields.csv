@@ -1,0 +1,13 @@
+error,message
+authentication_error,"401 Unauthorized: Invalid login attempt.
+Common causes:
+  1. Access token is INACTIVE - Check Setup > Users/Roles > Access Tokens
+     - Find your token and ensure the 'INACTIVE' checkbox is UNCHECKED
+  2. Token ID or Token Secret is incorrect
+  3. Token has been revoked or reset
+  4. Account ID format is incorrect (e.g., should be 4083091_SB2 for sandbox)"
+,
+note,Please check NetSuite access token configuration
+,1. Ensure access token is ACTIVE in NetSuite
+,2. Verify token ID and secret in .env file
+,"3. Check account ID format (e.g., 4083091_SB2 for sandbox)"
