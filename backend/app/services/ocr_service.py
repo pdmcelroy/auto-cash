@@ -114,30 +114,29 @@ class OCRService:
             "raw_text": extracted_text
         }
         
-        # Extract check number (look for patterns like "Check #", "CK#", or standalone numbers)
+        # Extract check number first (so we can exclude it from amount extraction)
+        check_number = None
         check_patterns = [
+            r'check\s+number\s*:?\s*(\d+)',
             r'check\s*#?\s*:?\s*(\d+)',
             r'ck\s*#?\s*:?\s*(\d+)',
-            r'check\s+number\s*:?\s*(\d+)',
         ]
         for pattern in check_patterns:
             match = re.search(pattern, extracted_text, re.IGNORECASE)
             if match:
-                result["check_number"] = match.group(1)
+                check_number = match.group(1)
+                result["check_number"] = check_number
                 break
         
         # Extract amount (prioritize explicitly labeled amounts)
-        # Look for amounts in order of priority - handle formats like "Numerical: *****300.00*"
+        # Focus on patterns that work reliably - ignore asterisks in OCR output
         explicit_amount_patterns = [
-            (r'amount\s+is\s*:?\s*\$?\s*\*+\s*(\d+(?:,\d{3})*(?:\.\d{2})?)\s*\*?', 'amount is'),
-            (r'numerical\s*:?\s*\*+\s*(\d+(?:,\d{3})*(?:\.\d{2})?)\s*\*?', 'numerical'),
-            (r'handwritten\s*:?\s*\*+\s*(\d+(?:,\d{3})*(?:\.\d{2})?)\s*\*?', 'handwritten'),
-            (r'amount\s*:?\s*\$?\s*\*+\s*(\d+(?:,\d{3})*(?:\.\d{2})?)\s*\*?', 'amount'),
-            (r'pay\s+amount\s*:?\s*\$?\s*\*+\s*(\d+(?:,\d{3})*(?:\.\d{2})?)\s*\*?', 'pay amount'),
-            # Also handle patterns without asterisks
-            (r'amount\s+is\s*:?\s*\$?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)', 'amount is no asterisk'),
-            (r'numerical\s*:?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)', 'numerical no asterisk'),
-            (r'handwritten\s*:?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)', 'handwritten no asterisk'),
+            # Most reliable: explicit labels with amounts
+            (r'amount\s+is\s*:?\s*\$?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)', 'amount is'),
+            (r'numerical\s*:?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)', 'numerical'),
+            (r'handwritten\s*:?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)', 'handwritten'),
+            (r'amount\s*:?\s*\$?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)', 'amount'),
+            (r'pay\s+amount\s*:?\s*\$?\s*(\d+(?:,\d{3})*(?:\.\d{2})?)', 'pay amount'),
             (r'numerical\s+(\d+(?:,\d{3})*(?:\.\d{2})?)', 'numerical no colon'),
             (r'handwritten\s+(\d+(?:,\d{3})*(?:\.\d{2})?)', 'handwritten no colon'),
         ]
@@ -148,17 +147,35 @@ class OCRService:
             for m in matches:
                 try:
                     amount = float(m.replace(',', '').strip())
-                    # More restrictive range - exclude very large numbers that might be check numbers
-                    if 0.01 <= amount <= 1000000:  # Reasonable range for check amounts (up to $1M)
+                    # Exclude check numbers and very large numbers
+                    # Prioritize amounts with decimal points (more likely to be actual amounts)
+                    if (0.01 <= amount <= 1000000 and  # Reasonable range for check amounts
+                        (check_number is None or str(int(amount)) != check_number) and  # Not the check number
+                        ('.' in m or amount < 10000)):  # Has decimal point or is reasonable size
                         explicit_amounts.append(amount)
                 except:
                     pass
         
-        # If we found explicit amounts, use the most common one
+        # If we found explicit amounts, prioritize those with decimal points
         if explicit_amounts:
-            amount_counts = Counter(explicit_amounts)
-            # Get the most common amount (the one that appears most frequently)
-            result["amount"] = amount_counts.most_common(1)[0][0]
+            # Separate amounts with decimals from those without
+            amounts_with_decimals = [a for a in explicit_amounts if a % 1 != 0]
+            amounts_without_decimals = [a for a in explicit_amounts if a % 1 == 0]
+            
+            if amounts_with_decimals:
+                # Use most common amount with decimal
+                amount_counts = Counter(amounts_with_decimals)
+                result["amount"] = amount_counts.most_common(1)[0][0]
+            elif amounts_without_decimals:
+                # Fallback to amounts without decimals, but exclude check numbers
+                filtered = [a for a in amounts_without_decimals 
+                           if check_number is None or str(int(a)) != check_number]
+                if filtered:
+                    amount_counts = Counter(filtered)
+                    result["amount"] = amount_counts.most_common(1)[0][0]
+                else:
+                    amount_counts = Counter(amounts_without_decimals)
+                    result["amount"] = amount_counts.most_common(1)[0][0]
         else:
             # Fallback: look for dollar amounts with $ sign
             dollar_amount_patterns = [
@@ -190,10 +207,49 @@ class OCRService:
                 result["date"] = match.group(1)
                 break
         
-        # Extract payor name (usually before "Pay To The Order Of")
-        payor_match = re.search(r'([A-Z][A-Z\s&,\.]+(?:INC|LLC|CORP|LTD|INC\.|LLC\.|CORP\.|LTD\.)?)', extracted_text)
-        if payor_match:
-            result["payor_name"] = payor_match.group(1).strip()
+        # Extract payor name (usually at the top of the check, before "Pay To The Order Of")
+        # First, try to find "Payor Name:" label (most reliable)
+        payor_label_match = re.search(
+            r'payor\s+name\s*:?\s*([A-Z][A-Z\s&,\.\-]+(?:INC|LLC|CORP|LTD|INC\.|LLC\.|CORP\.|LTD\.|VENDOR)?(?:\s*-\s*\([^)]+\))?)',
+            extracted_text,
+            re.IGNORECASE
+        )
+        if payor_label_match:
+            payor_name = payor_label_match.group(1).strip()
+            # Clean up - take first line if multi-line
+            payor_name = payor_name.split('\n')[0].strip()
+            if len(payor_name) > 3:
+                result["payor_name"] = payor_name
+        
+        # If not found, look for company name patterns but exclude amount-related text
+        if not result["payor_name"]:
+            # Exclude common words that might match from amount text
+            exclude_words = ['EXACTLY', 'PAY', 'ORDER', 'DOLLARS', 'ONLY', 'AND', 'THE', 'TO', 'DOLLAR']
+            
+            # Split text by "Pay To The Order Of" to get the header section
+            parts = re.split(r'pay\s+to\s+the\s+order\s+of', extracted_text, flags=re.IGNORECASE, maxsplit=1)
+            if len(parts) > 0:
+                header_text = parts[0]
+                # Look for company name in header (must be substantial and have business suffix)
+                company_patterns = [
+                    r'^([A-Z][A-Z\s&,\.\-]{5,}(?:INC|LLC|CORP|LTD|INC\.|LLC\.|CORP\.|LTD\.|VENDOR))',
+                    r'([A-Z][A-Z\s&,\.\-]{8,}(?:INC|LLC|CORP|LTD|INC\.|LLC\.|CORP\.|LTD\.|VENDOR))',
+                ]
+                for pattern in company_patterns:
+                    matches = re.finditer(pattern, header_text, re.IGNORECASE | re.MULTILINE)
+                    for match in matches:
+                        payor_name = match.group(1).strip()
+                        payor_upper = payor_name.upper()
+                        # Skip if it's in excluded words or contains amount-related terms
+                        if (payor_upper not in exclude_words and 
+                            len(payor_name) > 5 and
+                            not any(word in payor_upper for word in exclude_words)):
+                            # Take first line if multi-line
+                            payor_name = payor_name.split('\n')[0].strip()
+                            result["payor_name"] = payor_name
+                            break
+                    if result["payor_name"]:
+                        break
         
         # Extract payee name (after "Pay To The Order Of")
         payee_match = re.search(r'pay\s+to\s+the\s+order\s+of\s*:?\s*([A-Z][A-Z\s&,\.]+(?:INC|LLC|CORP|LTD|INC\.|LLC\.|CORP\.|LTD\.)?)', extracted_text, re.IGNORECASE)
@@ -310,9 +366,18 @@ class OCRService:
                 result["amount"] = amount_counts.most_common(1)[0][0]
         
         # Extract customer/payor name
-        customer_match = re.search(r'payor\s+name\s*:?\s*([A-Z][A-Z\s&,\.\-]+(?:INC|LLC|CORP|LTD|INC\.|LLC\.|CORP\.|LTD\.|VENDOR)?)', extracted_text, re.IGNORECASE)
+        # First try "Payor Name:" label (most reliable)
+        customer_match = re.search(
+            r'payor\s+name\s*:?\s*([A-Z][A-Z\s&,\.\-]+(?:INC|LLC|CORP|LTD|INC\.|LLC\.|CORP\.|LTD\.|VENDOR)?(?:\s*-\s*\([^)]+\))?)',
+            extracted_text,
+            re.IGNORECASE
+        )
         if customer_match:
-            result["customer_name"] = customer_match.group(1).strip()
+            customer_name = customer_match.group(1).strip()
+            # Clean up - take first line if multi-line
+            customer_name = customer_name.split('\n')[0].strip()
+            if len(customer_name) > 3:
+                result["customer_name"] = customer_name
         
         # Extract check number
         check_match = re.search(r'check\s*#?\s*:?\s*(\d+)', extracted_text, re.IGNORECASE)

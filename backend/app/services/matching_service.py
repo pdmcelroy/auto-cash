@@ -124,49 +124,51 @@ class MatchingService:
             for inv_num in ocr_result.invoice_numbers:
                 invoices = self._search_invoices_by_number(inv_num, limit=20)
                 for invoice in invoices:
-                    invoice_id = invoice["invoice_id"]
-                    if invoice_id not in all_matches:
-                        all_matches[invoice_id] = invoice
-                        all_matches[invoice_id]["match_score"] = 0.0
-                        all_matches[invoice_id]["match_reasons"] = []
+                    # Create unique key: invoice_number + amount + customer (to handle duplicate invoice numbers)
+                    # This allows multiple line items with the same invoice number to be shown separately
+                    unique_key = f"{invoice['invoice_number']}_{invoice.get('amount', 0)}_{invoice.get('customer_name', '')}"
+                    if unique_key not in all_matches:
+                        all_matches[unique_key] = invoice
+                        all_matches[unique_key]["match_score"] = 0.0
+                        all_matches[unique_key]["match_reasons"] = []
                     
                     # High score for exact invoice number match
                     if invoice["invoice_number"].upper() == inv_num.upper():
-                        all_matches[invoice_id]["match_score"] += 100.0
-                        all_matches[invoice_id]["match_reasons"].append(f"Exact invoice number match: {inv_num}")
+                        all_matches[unique_key]["match_score"] += 100.0
+                        all_matches[unique_key]["match_reasons"].append(f"Exact invoice number match: {inv_num}")
                         
                         # BONUS: If amount also matches, give very high score
                         if ocr_result.amount and invoice.get("amount"):
                             amount_diff = abs(ocr_result.amount - invoice["amount"])
                             if amount_diff < 0.01:  # Exact amount match
-                                all_matches[invoice_id]["match_score"] += 150.0  # Big bonus for both matching
-                                all_matches[invoice_id]["match_reasons"].append(f"Exact amount match: ${invoice['amount']:.2f}")
+                                all_matches[unique_key]["match_score"] += 150.0  # Big bonus for both matching
+                                all_matches[unique_key]["match_reasons"].append(f"Exact amount match: ${invoice['amount']:.2f}")
                             elif amount_diff < 1.0:  # Within $1
-                                all_matches[invoice_id]["match_score"] += 100.0
-                                all_matches[invoice_id]["match_reasons"].append(f"Amount match (within $1): ${invoice['amount']:.2f}")
+                                all_matches[unique_key]["match_score"] += 100.0
+                                all_matches[unique_key]["match_reasons"].append(f"Amount match (within $1): ${invoice['amount']:.2f}")
                             elif amount_diff < 10.0:  # Within $10
-                                all_matches[invoice_id]["match_score"] += 50.0
-                                all_matches[invoice_id]["match_reasons"].append(f"Amount match (within $10): ${invoice['amount']:.2f}")
+                                all_matches[unique_key]["match_score"] += 50.0
+                                all_matches[unique_key]["match_reasons"].append(f"Amount match (within $10): ${invoice['amount']:.2f}")
                     elif inv_num.upper() in invoice["invoice_number"].upper() or invoice["invoice_number"].upper() in inv_num.upper():
                         # Partial match - only give points if amount also matches reasonably
                         if ocr_result.amount and invoice.get("amount"):
                             amount_diff = abs(ocr_result.amount - invoice["amount"])
                             if amount_diff < 0.01:  # Exact amount match
-                                all_matches[invoice_id]["match_score"] += 80.0
-                                all_matches[invoice_id]["match_reasons"].append(f"Partial invoice number match: {inv_num}")
-                                all_matches[invoice_id]["match_reasons"].append(f"Exact amount match: ${invoice['amount']:.2f}")
+                                all_matches[unique_key]["match_score"] += 80.0
+                                all_matches[unique_key]["match_reasons"].append(f"Partial invoice number match: {inv_num}")
+                                all_matches[unique_key]["match_reasons"].append(f"Exact amount match: ${invoice['amount']:.2f}")
                             elif amount_diff < 10.0:  # Within $10
-                                all_matches[invoice_id]["match_score"] += 50.0
-                                all_matches[invoice_id]["match_reasons"].append(f"Partial invoice number match: {inv_num}")
-                                all_matches[invoice_id]["match_reasons"].append(f"Amount match (within $10): ${invoice['amount']:.2f}")
+                                all_matches[unique_key]["match_score"] += 50.0
+                                all_matches[unique_key]["match_reasons"].append(f"Partial invoice number match: {inv_num}")
+                                all_matches[unique_key]["match_reasons"].append(f"Amount match (within $10): ${invoice['amount']:.2f}")
                             else:
                                 # Partial invoice match but amount doesn't match - give very low score
-                                all_matches[invoice_id]["match_score"] += 20.0
-                                all_matches[invoice_id]["match_reasons"].append(f"Partial invoice number match: {inv_num} (amount mismatch: ${amount_diff:.2f})")
+                                all_matches[unique_key]["match_score"] += 20.0
+                                all_matches[unique_key]["match_reasons"].append(f"Partial invoice number match: {inv_num} (amount mismatch: ${amount_diff:.2f})")
                         else:
                             # No amount to compare - give low score for partial match only
-                            all_matches[invoice_id]["match_score"] += 30.0
-                            all_matches[invoice_id]["match_reasons"].append(f"Partial invoice number match: {inv_num} (no amount to verify)")
+                            all_matches[unique_key]["match_score"] += 30.0
+                            all_matches[unique_key]["match_reasons"].append(f"Partial invoice number match: {inv_num} (no amount to verify)")
         
         # Secondary: Search by customer name + amount
         if ocr_result.customer_name or ocr_result.payor_name:
@@ -174,11 +176,12 @@ class MatchingService:
             if customer_name:
                 invoices = self._search_invoices_by_customer(customer_name, limit=50)
                 for invoice in invoices:
-                    invoice_id = invoice["invoice_id"]
-                    if invoice_id not in all_matches:
-                        all_matches[invoice_id] = invoice
-                        all_matches[invoice_id]["match_score"] = 0.0
-                        all_matches[invoice_id]["match_reasons"] = []
+                    # Create unique key: invoice_number + amount + customer (to handle duplicate invoice numbers)
+                    unique_key = f"{invoice['invoice_number']}_{invoice.get('amount', 0)}_{invoice.get('customer_name', '')}"
+                    if unique_key not in all_matches:
+                        all_matches[unique_key] = invoice
+                        all_matches[unique_key]["match_score"] = 0.0
+                        all_matches[unique_key]["match_reasons"] = []
                     
                     # Score based on customer name similarity
                     name_similarity = self._string_similarity(
@@ -188,52 +191,63 @@ class MatchingService:
                     
                     # Score based on amount match (if available)
                     amount_score = 0.0
+                    amount_diff = 0.0
                     if ocr_result.amount and invoice.get("amount"):
                         amount_diff = abs(ocr_result.amount - invoice["amount"])
                         if amount_diff < 0.01:  # Exact match
-                            amount_score = 50.0
+                            amount_score = 80.0  # Increased from 50.0 - exact amount is very important
                         elif amount_diff < 1.0:  # Within $1
-                            amount_score = 40.0
+                            amount_score = 60.0  # Increased from 40.0
                         elif amount_diff < 10.0:  # Within $10
-                            amount_score = 30.0
+                            amount_score = 40.0  # Increased from 30.0
                         elif amount_diff < 100.0:  # Within $100
-                            amount_score = 20.0
+                            amount_score = 25.0  # Increased from 20.0
                     
-                    combined_score = (name_similarity * 40.0) + amount_score
-                    all_matches[invoice_id]["match_score"] += combined_score
+                    # Increased name similarity weight and ensure customer + exact amount = high score
+                    name_score = name_similarity * 50.0  # Increased from 40.0
+                    combined_score = name_score + amount_score
+                    
+                    # Bonus: If customer name is very similar (>0.9) AND amount matches exactly, give extra points
+                    if name_similarity > 0.9 and amount_diff < 0.01:
+                        combined_score += 30.0  # Bonus for high confidence match
+                    
+                    all_matches[unique_key]["match_score"] += combined_score
                     
                     if name_similarity > 0.7:
-                        all_matches[invoice_id]["match_reasons"].append(
+                        all_matches[unique_key]["match_reasons"].append(
                             f"Customer name match: {invoice['customer_name']} (similarity: {name_similarity:.2f})"
                         )
                     if amount_score > 0:
-                        all_matches[invoice_id]["match_reasons"].append(
+                        all_matches[unique_key]["match_reasons"].append(
                             f"Amount match: ${invoice['amount']:.2f} (diff: ${amount_diff:.2f})"
                         )
         
         # Tertiary: Search by amount only (if no other strong matches)
         if ocr_result.amount and len(all_matches) < 5:
-            invoices = self._search_invoices_by_amount(ocr_result.amount, tolerance=0.01, limit=20)
-            for invoice in invoices:
-                invoice_id = invoice["invoice_id"]
-                if invoice_id not in all_matches:
-                    all_matches[invoice_id] = invoice
-                    all_matches[invoice_id]["match_score"] = 0.0
-                    all_matches[invoice_id]["match_reasons"] = []
-                
-                # Lower score for amount-only match
-                amount_score = 15.0
-                all_matches[invoice_id]["match_score"] += amount_score
-                all_matches[invoice_id]["match_reasons"].append(
-                    f"Amount-only match: ${invoice['amount']:.2f}"
-                )
+                invoices = self._search_invoices_by_amount(ocr_result.amount, tolerance=0.01, limit=20)
+                for invoice in invoices:
+                    # Create unique key: invoice_number + amount + customer (to handle duplicate invoice numbers)
+                    unique_key = f"{invoice['invoice_number']}_{invoice.get('amount', 0)}_{invoice.get('customer_name', '')}"
+                    if unique_key not in all_matches:
+                        all_matches[unique_key] = invoice
+                        all_matches[unique_key]["match_score"] = 0.0
+                        all_matches[unique_key]["match_reasons"] = []
+                    
+                    # Lower score for amount-only match
+                    amount_score = 15.0
+                    all_matches[unique_key]["match_score"] += amount_score
+                    all_matches[unique_key]["match_reasons"].append(
+                        f"Amount-only match: ${invoice['amount']:.2f}"
+                    )
         
         # Convert to InvoiceMatch objects and sort by score
         matches = []
-        for invoice_id, invoice_data in all_matches.items():
-            if invoice_data["match_score"] > 0:
+        for unique_key, invoice_data in all_matches.items():
+            # Only include matches with score above 100
+            if invoice_data["match_score"] > 100.0:
+                # Use unique_key as invoice_id to preserve uniqueness, but display the invoice_number
                 match = InvoiceMatch(
-                    invoice_id=invoice_data["invoice_id"],
+                    invoice_id=unique_key,  # Use unique key to preserve separate line items
                     invoice_number=invoice_data["invoice_number"],
                     customer_name=invoice_data["customer_name"],
                     amount=invoice_data.get("amount", 0.0),

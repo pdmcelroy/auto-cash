@@ -39,11 +39,18 @@ class CSVInvoiceService:
             )
         
         self._invoices_cache = None
+        self._csv_mtime = None  # Track CSV file modification time
     
     def _load_invoices(self) -> List[Dict[str, Any]]:
         """Load and cache invoices from CSV"""
-        if self._invoices_cache is not None:
+        # Check if CSV file has been modified
+        current_mtime = self.csv_path.stat().st_mtime if self.csv_path.exists() else 0
+        if self._invoices_cache is not None and self._csv_mtime == current_mtime:
             return self._invoices_cache
+        
+        # Clear cache if file was modified
+        if self._csv_mtime is not None and self._csv_mtime != current_mtime:
+            self._invoices_cache = None
         
         invoices = []
         try:
@@ -77,6 +84,7 @@ class CSVInvoiceService:
                     invoices.append(invoice)
             
             self._invoices_cache = invoices
+            self._csv_mtime = current_mtime  # Store modification time
             return invoices
         except Exception as e:
             raise Exception(f"Failed to load CSV file: {str(e)}")

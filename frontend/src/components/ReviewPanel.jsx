@@ -1,5 +1,5 @@
-const ReviewPanel = ({ selectedInvoice, onConfirm, onCancel }) => {
-  if (!selectedInvoice) {
+const ReviewPanel = ({ selectedInvoices, onConfirm, onCancel }) => {
+  if (!selectedInvoices || selectedInvoices.length === 0) {
     return null;
   }
 
@@ -12,42 +12,47 @@ const ReviewPanel = ({ selectedInvoice, onConfirm, onCancel }) => {
     }
   };
 
+  const totalAmount = selectedInvoices.reduce((sum, inv) => sum + (inv.amount || 0), 0);
+
   return (
     <div className="review-panel">
       <h3>Review & Confirm</h3>
       
       <div className="review-content">
-        <div className="selected-invoice">
-          <h4>Selected Invoice</h4>
-          <div className="invoice-details">
-            <div className="detail-row">
-              <label>Invoice Number:</label>
-              <span>{selectedInvoice.invoice_number}</span>
-            </div>
-            <div className="detail-row">
-              <label>Customer:</label>
-              <span>{selectedInvoice.customer_name}</span>
-            </div>
-            <div className="detail-row">
-              <label>Amount:</label>
-              <span>${selectedInvoice.amount?.toFixed(2) || 'N/A'}</span>
-            </div>
-            {selectedInvoice.due_date && (
-              <div className="detail-row">
-                <label>Due Date:</label>
-                <span>{formatDate(selectedInvoice.due_date)}</span>
+        <div className="selected-invoices">
+          <h4>Selected Invoice{selectedInvoices.length > 1 ? 's' : ''} ({selectedInvoices.length})</h4>
+          <div className="invoices-list">
+            {selectedInvoices.map((invoice, idx) => (
+              <div key={invoice.invoice_id} className="invoice-details">
+                <div className="invoice-header">
+                  <strong>Invoice #{idx + 1}: {invoice.invoice_number}</strong>
+                  <span className="match-score-badge">Score: {invoice.match_score.toFixed(1)}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Customer:</label>
+                  <span>{invoice.customer_name}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Amount:</label>
+                  <span>${invoice.amount?.toFixed(2) || 'N/A'}</span>
+                </div>
+                {invoice.due_date && (
+                  <div className="detail-row">
+                    <label>Due Date:</label>
+                    <span>{formatDate(invoice.due_date)}</span>
+                  </div>
+                )}
+                {invoice.subsidiary && (
+                  <div className="detail-row">
+                    <label>Subsidiary:</label>
+                    <span>{invoice.subsidiary}</span>
+                  </div>
+                )}
               </div>
-            )}
-            {selectedInvoice.subsidiary && (
-              <div className="detail-row">
-                <label>Subsidiary:</label>
-                <span>{selectedInvoice.subsidiary}</span>
-              </div>
-            )}
-            <div className="detail-row">
-              <label>Match Score:</label>
-              <span>{selectedInvoice.match_score.toFixed(1)}</span>
-            </div>
+            ))}
+          </div>
+          <div className="total-amount">
+            <strong>Total Amount: ${totalAmount.toFixed(2)}</strong>
           </div>
         </div>
 

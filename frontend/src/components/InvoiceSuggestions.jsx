@@ -1,16 +1,16 @@
-const InvoiceSuggestions = ({ matches, onSelectInvoice, selectedInvoiceId }) => {
+const InvoiceSuggestions = ({ matches, onSelectInvoice, selectedInvoiceIds = [] }) => {
   if (!matches || matches.length === 0) {
     return (
       <div className="invoice-suggestions">
         <h3>Invoice Matches</h3>
-        <p className="no-matches">No matching invoices found in NetSuite.</p>
+        <p className="no-matches">No matching invoices found with score above 100.</p>
       </div>
     );
   }
 
   const getScoreColor = (score) => {
-    if (score >= 80) return 'high-score';
-    if (score >= 50) return 'medium-score';
+    if (score >= 200) return 'high-score';
+    if (score >= 150) return 'medium-score';
     return 'low-score';
   };
 
@@ -23,18 +23,39 @@ const InvoiceSuggestions = ({ matches, onSelectInvoice, selectedInvoiceId }) => 
     }
   };
 
+  const handleToggleInvoice = (invoice) => {
+    if (onSelectInvoice) {
+      onSelectInvoice(invoice);
+    }
+  };
+
+  const isSelected = (invoiceId) => {
+    return selectedInvoiceIds.includes(invoiceId);
+  };
+
   return (
     <div className="invoice-suggestions">
       <h3>Invoice Matches ({matches.length})</h3>
-      <p className="matches-description">Select the invoice(s) that match this payment:</p>
+      <p className="matches-description">Select one or more invoices that match this payment:</p>
       
       <div className="matches-list">
         {matches.map((match) => (
           <div
             key={match.invoice_id}
-            className={`invoice-match ${selectedInvoiceId === match.invoice_id ? 'selected' : ''} ${getScoreColor(match.match_score)}`}
-            onClick={() => onSelectInvoice && onSelectInvoice(match)}
+            className={`invoice-match ${isSelected(match.invoice_id) ? 'selected' : ''} ${getScoreColor(match.match_score)}`}
           >
+            <div className="invoice-checkbox">
+              <input
+                type="checkbox"
+                checked={isSelected(match.invoice_id)}
+                onChange={() => handleToggleInvoice(match)}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+            <div 
+              className="invoice-match-content"
+              onClick={() => handleToggleInvoice(match)}
+            >
             <div className="match-header">
               <div className="match-score">
                 <span className="score-value">{match.match_score.toFixed(1)}</span>
@@ -75,6 +96,7 @@ const InvoiceSuggestions = ({ matches, onSelectInvoice, selectedInvoiceId }) => 
                 </ul>
               </div>
             )}
+            </div>
           </div>
         ))}
       </div>

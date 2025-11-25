@@ -10,16 +10,16 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [ocrResult, setOcrResult] = useState(null);
   const [matches, setMatches] = useState([]);
-  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [error, setError] = useState(null);
   const [processingTime, setProcessingTime] = useState(null);
 
   const handleCheckUpload = async (file) => {
     setLoading(true);
     setError(null);
-    setOcrResult(null);
-    setMatches([]);
-    setSelectedInvoice(null);
+      setOcrResult(null);
+      setMatches([]);
+      setSelectedInvoices([]);
 
     try {
       const response = await uploadCheck(file);
@@ -37,9 +37,9 @@ function App() {
   const handleRemittanceUpload = async (file) => {
     setLoading(true);
     setError(null);
-    setOcrResult(null);
-    setMatches([]);
-    setSelectedInvoice(null);
+      setOcrResult(null);
+      setMatches([]);
+      setSelectedInvoices([]);
 
     try {
       const response = await uploadRemittance(file);
@@ -62,9 +62,9 @@ function App() {
 
     setLoading(true);
     setError(null);
-    setOcrResult(null);
-    setMatches([]);
-    setSelectedInvoice(null);
+      setOcrResult(null);
+      setMatches([]);
+      setSelectedInvoices([]);
 
     try {
       const response = await uploadBoth(checkFile, remittanceFile);
@@ -80,22 +80,36 @@ function App() {
   };
 
   const handleSelectInvoice = (invoice) => {
-    setSelectedInvoice(invoice);
+    setSelectedInvoices(prev => {
+      const isSelected = prev.some(inv => inv.invoice_id === invoice.invoice_id);
+      if (isSelected) {
+        // Remove if already selected
+        return prev.filter(inv => inv.invoice_id !== invoice.invoice_id);
+      } else {
+        // Add if not selected
+        return [...prev, invoice];
+      }
+    });
   };
 
   const handleConfirm = () => {
-    alert(`Invoice ${selectedInvoice.invoice_number} selected. Payment application feature coming soon!`);
+    if (selectedInvoices.length === 0) {
+      alert('Please select at least one invoice');
+      return;
+    }
+    const invoiceNumbers = selectedInvoices.map(inv => inv.invoice_number).join(', ');
+    alert(`Selected ${selectedInvoices.length} invoice(s): ${invoiceNumbers}. Payment application feature coming soon!`);
     // TODO: Implement payment application in NetSuite
   };
 
   const handleCancel = () => {
-    setSelectedInvoice(null);
+    setSelectedInvoices([]);
   };
 
   const handleReset = () => {
-    setOcrResult(null);
-    setMatches([]);
-    setSelectedInvoice(null);
+      setOcrResult(null);
+      setMatches([]);
+      setSelectedInvoices([]);
     setError(null);
     setProcessingTime(null);
   };
@@ -134,12 +148,12 @@ function App() {
             <InvoiceSuggestions
               matches={matches}
               onSelectInvoice={handleSelectInvoice}
-              selectedInvoiceId={selectedInvoice?.invoice_id}
+              selectedInvoiceIds={selectedInvoices.map(inv => inv.invoice_id)}
             />
 
-            {selectedInvoice && (
+            {selectedInvoices.length > 0 && (
               <ReviewPanel
-                selectedInvoice={selectedInvoice}
+                selectedInvoices={selectedInvoices}
                 onConfirm={handleConfirm}
                 onCancel={handleCancel}
               />

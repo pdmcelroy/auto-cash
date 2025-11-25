@@ -286,6 +286,25 @@ body {
   cursor: pointer;
   transition: all 0.3s;
   background: white;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.invoice-checkbox {
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.invoice-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #4CAF50;
+}
+
+.invoice-match-content {
+  flex: 1;
 }
 
 .invoice-match:hover {
@@ -434,19 +453,55 @@ body {
   padding-bottom: 10px;
 }
 
-.selected-invoice {
+.selected-invoices {
   margin-bottom: 25px;
 }
 
-.selected-invoice h4 {
+.selected-invoices h4 {
   margin-bottom: 15px;
   color: #555;
+}
+
+.invoices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .invoice-details {
   background: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
+  border-left: 4px solid #4CAF50;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.match-score-badge {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.total-amount {
+  background: #e8f5e9;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 18px;
+  color: #2e7d32;
+  margin-top: 15px;
 }
 
 .detail-row {
