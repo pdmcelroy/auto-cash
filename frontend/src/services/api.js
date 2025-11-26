@@ -9,40 +9,11 @@ const api = axios.create({
   },
 });
 
-export const uploadCheck = async (file) => {
-  const formData = new FormData();
-  formData.append('file', file);
-  
-  const response = await api.post('/api/upload/check', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
-};
-
 export const uploadRemittance = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
   
   const response = await api.post('/api/upload/remittance', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
-};
-
-export const uploadBoth = async (checkFile, remittanceFile) => {
-  const formData = new FormData();
-  if (checkFile) {
-    formData.append('check', checkFile);
-  }
-  if (remittanceFile) {
-    formData.append('remittance', remittanceFile);
-  }
-  
-  const response = await api.post('/api/upload/both', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -67,6 +38,18 @@ export const uploadBatch = async (files) => {
   });
   
   const response = await api.post('/api/upload/batch', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
+export const uploadPdf = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  const response = await api.post('/api/upload/pdf', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

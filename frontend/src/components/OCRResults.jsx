@@ -7,33 +7,26 @@ const OCRResults = ({ ocrResult }) => {
     <div className="ocr-results">
       <h3>Extracted Data</h3>
       <div className="ocr-data-grid">
-        {ocrResult.check_number && (
-          <div className="ocr-field">
-            <label>Check Number:</label>
-            <span>{ocrResult.check_number}</span>
-          </div>
-        )}
+        {/* Always show these critical fields */}
+        <div className="ocr-field">
+          <label>Check Number:</label>
+          <span>{ocrResult.check_number || <em>Not extracted</em>}</span>
+        </div>
         
-        {ocrResult.amount && (
-          <div className="ocr-field">
-            <label>Amount:</label>
-            <span>${ocrResult.amount.toFixed(2)}</span>
-          </div>
-        )}
+        <div className="ocr-field">
+          <label>Amount:</label>
+          <span>{ocrResult.amount ? `$${ocrResult.amount.toFixed(2)}` : <em>Not extracted</em>}</span>
+        </div>
         
-        {ocrResult.date && (
-          <div className="ocr-field">
-            <label>Date:</label>
-            <span>{ocrResult.date}</span>
-          </div>
-        )}
+        <div className="ocr-field">
+          <label>Date:</label>
+          <span>{ocrResult.date || <em>Not extracted</em>}</span>
+        </div>
         
-        {ocrResult.payor_name && (
-          <div className="ocr-field">
-            <label>Payor/Customer:</label>
-            <span>{ocrResult.payor_name}</span>
-          </div>
-        )}
+        <div className="ocr-field">
+          <label>Payor/Customer:</label>
+          <span>{ocrResult.payor_name || ocrResult.customer_name || <em>Not extracted</em>}</span>
+        </div>
         
         {ocrResult.payee_name && (
           <div className="ocr-field">
@@ -72,4 +65,5 @@ const OCRResults = ({ ocrResult }) => {
 };
 
 export default OCRResults;
+
 

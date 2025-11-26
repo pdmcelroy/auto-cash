@@ -50,3 +50,19 @@ class BatchUploadResponse(BaseModel):
     total_processing_time: float
     total_files: int
 
+
+class CheckGroup(BaseModel):
+    """Grouped pages for a single check"""
+    check_number: Optional[str]
+    pages: List[int]  # Page indices (0-based)
+    ocr_result: OCRResult
+    matches: List[InvoiceMatch]
+    processing_time: float
+
+
+class PDFUploadResponse(BaseModel):
+    """Response containing processed PDF with pages grouped by check"""
+    check_groups: List[CheckGroup]
+    total_processing_time: float
+    total_pages: int
+

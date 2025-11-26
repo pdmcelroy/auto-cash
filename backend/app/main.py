@@ -2,10 +2,22 @@
 FastAPI application for cash application automation
 """
 import os
+import logging
 from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),  # Console output
+        logging.FileHandler('logs/backend.log') if Path('logs').exists() else logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
 
 # Load environment variables before importing routes
 # Resolve paths relative to this file
@@ -57,9 +69,9 @@ async def root():
         "message": "Cash Application API",
         "version": "1.0.0",
         "endpoints": {
-            "upload_check": "/api/upload/check",
             "upload_remittance": "/api/upload/remittance",
-            "upload_both": "/api/upload/both",
+            "upload_pdf": "/api/upload/pdf",
+            "upload_batch": "/api/upload/batch",
             "search_invoices": "/api/invoices/search",
             "get_invoice": "/api/invoices/{invoice_id}"
         }
@@ -81,4 +93,29 @@ async def env_check():
         "netsuite_account_id": bool(os.getenv("NETSUITE_ACCOUNT_ID")),
         "cwd": os.getcwd(),
     }
+
+
+@app.get("/logs")
+async def get_logs(lines: int = 100):
+    """Get recent backend logs"""
+    log_file = Path("logs/backend.log")
+    if log_file.exists():
+        try:
+            with open(log_file, 'r') as f:
+                all_lines = f.readlines()
+                recent_lines = all_lines[-lines:] if len(all_lines) > lines else all_lines
+                return {
+                    "log_file": str(log_file),
+                    "total_lines": len(all_lines),
+                    "showing_last": len(recent_lines),
+                    "logs": recent_lines
+                }
+        except Exception as e:
+            return {"error": f"Could not read log file: {str(e)}"}
+    else:
+        return {
+            "message": "Log file not found. Logs may be in the terminal where the backend was started.",
+            "log_file": str(log_file),
+            "exists": False
+        }
 

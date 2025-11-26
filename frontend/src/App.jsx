@@ -3,7 +3,7 @@ import FileUpload from './components/FileUpload';
 import OCRResults from './components/OCRResults';
 import InvoiceSuggestions from './components/InvoiceSuggestions';
 import ReviewPanel from './components/ReviewPanel';
-import { uploadCheck, uploadRemittance, uploadBoth, uploadBatch } from './services/api';
+import { uploadRemittance, uploadPdf, uploadBatch } from './services/api';
 import './App.css';
 
 function App() {
@@ -14,26 +14,6 @@ function App() {
   const [error, setError] = useState(null);
   const [processingTime, setProcessingTime] = useState(null);
   const [batchResults, setBatchResults] = useState([]); // Array of {checkNumber, ocrResult, matches}
-
-  const handleCheckUpload = async (file) => {
-    setLoading(true);
-    setError(null);
-      setOcrResult(null);
-      setMatches([]);
-      setSelectedInvoices([]);
-
-    try {
-      const response = await uploadCheck(file);
-      setOcrResult(response.ocr_result);
-      setMatches(response.matches);
-      setProcessingTime(response.processing_time);
-    } catch (err) {
-      setError(err.response?.data?.detail || err.message || 'Failed to process check image');
-      console.error('Error uploading check:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleRemittanceUpload = async (file) => {
     setLoading(true);
@@ -55,27 +35,37 @@ function App() {
     }
   };
 
-  const handleBothUpload = async (checkFile, remittanceFile) => {
-    if (!checkFile && !remittanceFile) {
-      setError('Please upload at least one file');
-      return;
-    }
-
+  const handlePdfUpload = async (file) => {
     setLoading(true);
     setError(null);
-      setOcrResult(null);
-      setMatches([]);
-      setSelectedInvoices([]);
-      setBatchResults([]);
+    setOcrResult(null);
+    setMatches([]);
+    setSelectedInvoices([]);
+    setBatchResults([]);
 
     try {
-      const response = await uploadBoth(checkFile, remittanceFile);
-      setOcrResult(response.ocr_result);
-      setMatches(response.matches);
-      setProcessingTime(response.processing_time);
+      const response = await uploadPdf(file);
+      
+      // Convert PDF response to batch results format for consistent display
+      const processedResults = response.check_groups.map((group, idx) => {
+        const checkNumber = group.check_number || `Check ${idx + 1}`;
+        
+        return {
+          id: group.check_number || `check-${idx}`,
+          checkNumber: checkNumber,
+          ocrResult: group.ocr_result,
+          matches: group.matches,
+          processingTime: group.processing_time,
+          pages: group.pages,
+          filename: file.name
+        };
+      });
+      
+      setBatchResults(processedResults);
+      setProcessingTime(response.total_processing_time);
     } catch (err) {
-      setError(err.response?.data?.detail || err.message || 'Failed to process files');
-      console.error('Error uploading files:', err);
+      setError(err.response?.data?.detail || err.message || 'Failed to process PDF');
+      console.error('Error uploading PDF:', err);
     } finally {
       setLoading(false);
     }
@@ -98,14 +88,21 @@ function App() {
       const response = await uploadBatch(files);
       
       // Process batch results - group by check number
-      const processedResults = response.results.map((result, idx) => ({
-        id: result.ocr_result.check_number || `file-${idx}`,
-        checkNumber: result.ocr_result.check_number || `File ${idx + 1}`,
-        ocrResult: result.ocr_result,
-        matches: result.matches,
-        processingTime: result.processing_time,
-        filename: files[idx]?.name || `File ${idx + 1}`
-      }));
+      const processedResults = response.results.map((result, idx) => {
+        const filename = files[idx]?.name || `File ${idx + 1}`;
+        // Use filename (without extension) as fallback if check number not extracted
+        const filenameBase = filename.replace(/\.[^/.]+$/, ''); // Remove extension
+        const checkNumber = result.ocr_result.check_number || filenameBase;
+        
+        return {
+          id: result.ocr_result.check_number || `file-${idx}`,
+          checkNumber: checkNumber,
+          ocrResult: result.ocr_result,
+          matches: result.matches,
+          processingTime: result.processing_time,
+          filename: filename
+        };
+      });
       
       setBatchResults(processedResults);
       setProcessingTime(response.total_processing_time);
@@ -178,9 +175,8 @@ function App() {
 
       <main className="app-main">
         <FileUpload
-          onCheckUpload={handleCheckUpload}
           onRemittanceUpload={handleRemittanceUpload}
-          onBothUpload={handleBothUpload}
+          onPdfUpload={handlePdfUpload}
           onBatchUpload={handleBatchUpload}
           loading={loading}
         />
@@ -229,7 +225,15 @@ function App() {
             {batchResults.map((result, idx) => (
               <div key={result.id} className="batch-result-item">
                 <div className="batch-result-header">
-                  <h3>Check #{result.checkNumber} - {result.filename}</h3>
+                  <h3>
+                    {result.ocrResult.check_number 
+                      ? `Check #${result.checkNumber}` 
+                      : `Check: ${result.filename}`}
+                    {result.ocrResult.check_number && ` - ${result.filename}`}
+                    {result.pages && result.pages.length > 0 && (
+                      <span className="page-info"> (Pages {result.pages.map(p => p + 1).join(', ')})</span>
+                    )}
+                  </h3>
                   <span className="processing-time">Processed in {result.processingTime.toFixed(2)}s</span>
                 </div>
                 <OCRResults ocrResult={result.ocrResult} />

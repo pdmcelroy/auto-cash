@@ -1,0 +1,762 @@
+INFO:     Will watch for changes in these directories: ['/Users/pmcelroy/Documents/development/automated-cash-app/backend']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [65521] using WatchFiles
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [65536]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Loaded .env from: /Users/pmcelroy/Documents/development/automated-cash-app/.env
+Using Token-Based Authentication (TBA)
+INFO:     127.0.0.1:49889 - "GET /health HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [65536]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [65609]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Loaded .env from: /Users/pmcelroy/Documents/development/automated-cash-app/.env
+Using Token-Based Authentication (TBA)
+INFO:     127.0.0.1:49930 - "GET /health HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [65609]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [65638]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-11-26 11:16:16,739 - app.routes.upload - INFO - Starting PDF upload processing for file: pages.pdf
+2025-11-26 11:16:16,739 - app.routes.upload - INFO - PDF file read: 2594646 bytes
+2025-11-26 11:16:16,763 - app.routes.upload - INFO - Processing PDF pages and grouping by check...
+2025-11-26 11:16:16,763 - app.services.ocr_service - INFO - Converting PDF to images...
+2025-11-26 11:16:16,976 - app.services.ocr_service - INFO - PDF converted to 4 page(s)
+2025-11-26 11:16:16,976 - app.services.ocr_service - INFO - Processing page 1/4...
+2025-11-26 11:16:28,194 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 11:16:28,205 - app.services.ocr_service - INFO - Page 1 OCR completed
+2025-11-26 11:16:28,209 - app.services.ocr_service - INFO - Processing page 2/4...
+2025-11-26 11:16:34,950 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 11:16:34,953 - app.services.ocr_service - INFO - Page 2 OCR completed
+2025-11-26 11:16:34,953 - app.services.ocr_service - INFO - Processing page 3/4...
+2025-11-26 11:16:44,578 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 11:16:44,581 - app.services.ocr_service - INFO - Page 3 OCR completed
+2025-11-26 11:16:44,582 - app.services.ocr_service - INFO - Processing page 4/4...
+2025-11-26 11:16:46,654 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 11:16:46,656 - app.services.ocr_service - INFO - Page 4 OCR completed
+2025-11-26 11:16:46,658 - app.services.ocr_service - INFO - All 4 pages processed. Grouping by check number...
+2025-11-26 11:16:46,658 - app.services.ocr_service - INFO - Grouped into 3 check group(s)
+2025-11-26 11:16:46,658 - app.routes.upload - INFO - PDF processing complete. Found 3 check group(s)
+2025-11-26 11:16:46,659 - app.services.matching_service - INFO - CSV invoice service initialized successfully
+2025-11-26 11:16:46,659 - app.services.matching_service - INFO - NetSuite service disabled - using CSV only
+2025-11-26 11:16:46,659 - app.routes.upload - INFO - Processing check group 1/3: Check #14607
+2025-11-26 11:16:46,659 - app.routes.upload - INFO - Finding invoice matches for check #14607...
+2025-11-26 11:16:47,392 - app.services.matching_service - INFO - Found 1 invoices in CSV for All-Ways
+2025-11-26 11:16:50,222 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer All-Ways Forwarding
+2025-11-26 11:16:50,223 - app.routes.upload - INFO - Found 0 matches for check #14607
+2025-11-26 11:16:50,223 - app.routes.upload - INFO - Processing check group 2/3: Check #014607
+2025-11-26 11:16:50,223 - app.routes.upload - INFO - Finding invoice matches for check #014607...
+2025-11-26 11:16:50,265 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315269
+2025-11-26 11:16:50,306 - app.services.matching_service - INFO - Found 1 invoices in CSV for uoc-1977
+2025-11-26 11:16:50,348 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315269
+2025-11-26 11:16:53,243 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer U-FREIGHT AMERICA, INC.
+2025-11-26 11:16:53,244 - app.routes.upload - INFO - Found 0 matches for check #014607
+2025-11-26 11:16:53,244 - app.routes.upload - INFO - Processing check group 3/3: Check #287436
+2025-11-26 11:16:53,244 - app.routes.upload - INFO - Finding invoice matches for check #287436...
+2025-11-26 11:16:56,147 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer A&E CAGE COMPANY
+2025-11-26 11:16:56,148 - app.routes.upload - INFO - Found 0 matches for check #287436
+2025-11-26 11:16:56,148 - app.routes.upload - INFO - PDF processing complete. Total time: 39.41s, 3 check(s), 4 page(s)
+Loaded .env from: /Users/pmcelroy/Documents/development/automated-cash-app/.env
+Using Token-Based Authentication (TBA)
+INFO:     127.0.0.1:49961 - "POST /api/upload/pdf HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/main.py', 'app/services/ocr_service.py', 'app/models/schemas.py', 'app/routes/upload.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [65638]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [65866]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-11-26 11:36:35,197 - app.routes.upload - INFO - Starting PDF upload processing for file: pages.pdf
+2025-11-26 11:36:35,198 - app.routes.upload - INFO - PDF file read: 2707248 bytes
+2025-11-26 11:36:35,223 - app.routes.upload - INFO - Processing PDF pages and grouping by check...
+2025-11-26 11:36:35,223 - app.services.ocr_service - INFO - Converting PDF to images...
+2025-11-26 11:36:35,504 - app.services.ocr_service - INFO - PDF converted to 4 page(s)
+2025-11-26 11:36:35,504 - app.services.ocr_service - INFO - Processing page 1/4...
+2025-11-26 11:36:45,315 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 11:36:45,324 - app.services.ocr_service - INFO - Page 1 OCR completed
+2025-11-26 11:36:45,327 - app.services.ocr_service - INFO - Processing page 2/4...
+2025-11-26 11:36:47,218 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 11:36:47,220 - app.services.ocr_service - INFO - Page 2 OCR completed
+2025-11-26 11:36:47,221 - app.services.ocr_service - INFO - Processing page 3/4...
+2025-11-26 11:36:53,967 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 11:36:53,970 - app.services.ocr_service - INFO - Page 3 OCR completed
+2025-11-26 11:36:53,970 - app.services.ocr_service - INFO - Processing page 4/4...
+2025-11-26 11:37:03,731 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 11:37:03,733 - app.services.ocr_service - INFO - Page 4 OCR completed
+2025-11-26 11:37:03,734 - app.services.ocr_service - INFO - All 4 pages processed. Grouping by check number...
+2025-11-26 11:37:03,734 - app.services.ocr_service - INFO - Grouped into 2 check group(s)
+2025-11-26 11:37:03,734 - app.routes.upload - INFO - PDF processing complete. Found 2 check group(s)
+2025-11-26 11:37:03,735 - app.services.matching_service - INFO - CSV invoice service initialized successfully
+2025-11-26 11:37:03,735 - app.services.matching_service - INFO - NetSuite service disabled - using CSV only
+2025-11-26 11:37:03,735 - app.routes.upload - INFO - Processing check group 1/2: Check #14607
+2025-11-26 11:37:03,735 - app.routes.upload - INFO - Finding invoice matches for check #14607...
+2025-11-26 11:37:04,490 - app.services.matching_service - INFO - Found 1 invoices in CSV for All-Ways
+2025-11-26 11:37:07,426 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer All-Ways Forwarding
+2025-11-26 11:37:07,427 - app.routes.upload - INFO - Found 0 matches for check #14607
+2025-11-26 11:37:07,427 - app.routes.upload - INFO - Processing check group 2/2: Check #287436
+2025-11-26 11:37:07,427 - app.routes.upload - INFO - Finding invoice matches for check #287436...
+2025-11-26 11:37:07,470 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315267
+2025-11-26 11:37:07,512 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315268
+2025-11-26 11:37:10,408 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer A&E CAGE COMPANY
+2025-11-26 11:37:10,409 - app.routes.upload - INFO - Found 0 matches for check #287436
+2025-11-26 11:37:10,409 - app.routes.upload - INFO - PDF processing complete. Total time: 35.21s, 2 check(s), 4 page(s)
+Loaded .env from: /Users/pmcelroy/Documents/development/automated-cash-app/.env
+Using Token-Based Authentication (TBA)
+INFO:     127.0.0.1:50633 - "POST /api/upload/pdf HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/routes/upload.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [65866]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66920]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/routes/upload.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66920]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66924]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/routes/upload.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66924]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66934]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/routes/upload.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66934]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66942]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/routes/upload.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66942]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66943]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66943]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66947]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/suiteql_invoice_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66947]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66962]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66962]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66978]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66978]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66983]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66983]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66988]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66988]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66993]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66993]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [66998]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66998]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67003]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67003]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67010]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/routes/upload.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67010]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67015]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67015]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67025]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/suiteql_invoice_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67025]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67032]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py', 'app/services/matching_service.py', 'app/services/ocr_service.py', 'app/services/suiteql_invoice_service.py', 'app/routes/upload.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67032]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67043]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-11-26 12:16:04,118 - app.routes.upload - INFO - Starting PDF upload processing for file: pages.pdf
+2025-11-26 12:16:04,119 - app.routes.upload - INFO - PDF file read: 2707248 bytes
+2025-11-26 12:16:04,142 - app.routes.upload - INFO - Processing PDF pages and grouping by check...
+2025-11-26 12:16:04,142 - app.services.ocr_service - INFO - Converting PDF to images...
+2025-11-26 12:16:04,379 - app.services.ocr_service - INFO - PDF converted to 4 page(s)
+2025-11-26 12:16:04,379 - app.services.ocr_service - INFO - Processing page 1/4...
+2025-11-26 12:16:11,847 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:16:11,851 - app.services.ocr_service - INFO - Page 1 OCR completed
+2025-11-26 12:16:11,853 - app.services.ocr_service - INFO - Processing page 2/4...
+2025-11-26 12:16:15,382 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:16:15,385 - app.services.ocr_service - INFO - Page 2 OCR completed
+2025-11-26 12:16:15,386 - app.services.ocr_service - INFO - Processing page 3/4...
+2025-11-26 12:16:21,731 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:16:21,733 - app.services.ocr_service - INFO - Page 3 OCR completed
+2025-11-26 12:16:21,734 - app.services.ocr_service - INFO - Processing page 4/4...
+2025-11-26 12:16:29,619 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:16:29,622 - app.services.ocr_service - INFO - Page 4 OCR completed
+2025-11-26 12:16:29,622 - app.services.ocr_service - INFO - All 4 pages processed. Filtering and grouping by check number...
+2025-11-26 12:16:29,623 - app.services.ocr_service - INFO - Filtered to 4 useful pages (removed 0 useless pages)
+2025-11-26 12:16:29,623 - app.services.ocr_service - INFO - Grouped into 3 check group(s)
+2025-11-26 12:16:29,623 - app.routes.upload - INFO - PDF processing complete. Found 3 check group(s)
+2025-11-26 12:16:29,626 - app.services.matching_service - WARNING - SuiteQL service initialization failed: NETSUITE_ACCESS_TOKEN not provided and not found in environment variables. Please set NETSUITE_ACCESS_TOKEN in your .env file or pass it to the constructor.. Will use CSV only.
+2025-11-26 12:16:29,626 - app.services.matching_service - INFO - CSV invoice service initialized successfully (as fallback)
+2025-11-26 12:16:29,626 - app.routes.upload - INFO - Processing check group 1/3: Check #14607
+2025-11-26 12:16:29,626 - app.routes.upload - INFO - Finding invoice matches for check #14607...
+2025-11-26 12:16:30,311 - app.services.matching_service - INFO - Found 1 invoices in CSV for All-Ways
+2025-11-26 12:16:33,155 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer All-Ways Forwarding
+2025-11-26 12:16:36,080 - app.services.matching_service - INFO - Found 100 invoices in CSV for customer All-Ways Forwarding
+2025-11-26 12:16:36,087 - app.routes.upload - INFO - Found 1 matches for check #14607
+2025-11-26 12:16:36,087 - app.routes.upload - INFO - Processing check group 2/3: Check #014607
+2025-11-26 12:16:36,087 - app.routes.upload - INFO - Finding invoice matches for check #014607...
+2025-11-26 12:16:36,131 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315269
+2025-11-26 12:16:36,173 - app.services.matching_service - INFO - Found 1 invoices in CSV for uoc-1977
+2025-11-26 12:16:38,384 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer [not found]
+2025-11-26 12:16:38,385 - app.routes.upload - INFO - Found 0 matches for check #014607
+2025-11-26 12:16:38,385 - app.routes.upload - INFO - Processing check group 3/3: Check #287436
+2025-11-26 12:16:38,385 - app.routes.upload - INFO - Finding invoice matches for check #287436...
+2025-11-26 12:16:38,428 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315268
+2025-11-26 12:16:38,469 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315267
+2025-11-26 12:16:41,325 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer A&E CAGE COMPANY
+2025-11-26 12:16:44,318 - app.services.matching_service - INFO - Found 100 invoices in CSV for customer A&E CAGE COMPANY
+2025-11-26 12:16:44,324 - app.routes.upload - INFO - Found 6 matches for check #287436
+2025-11-26 12:16:44,325 - app.routes.upload - INFO - PDF processing complete. Total time: 40.21s, 3 check(s), 4 page(s)
+Loaded .env from: /Users/pmcelroy/Documents/development/automated-cash-app/.env
+Using Token-Based Authentication (TBA)
+INFO:     127.0.0.1:52207 - "POST /api/upload/pdf HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67043]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67218]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67218]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67228]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67228]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67235]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67235]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67241]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67241]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67242]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67242]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67248]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67248]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67249]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67249]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67256]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67256]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67261]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67261]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67268]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67268]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67276]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/ocr_service.py', 'app/services/matching_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67276]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67281]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-11-26 12:24:29,149 - app.routes.upload - INFO - Starting PDF upload processing for file: pages.pdf
+2025-11-26 12:24:29,150 - app.routes.upload - INFO - PDF file read: 2707248 bytes
+2025-11-26 12:24:29,174 - app.routes.upload - INFO - Processing PDF pages and grouping by check...
+2025-11-26 12:24:29,174 - app.services.ocr_service - INFO - Converting PDF to images...
+2025-11-26 12:24:29,414 - app.services.ocr_service - INFO - PDF converted to 4 page(s)
+2025-11-26 12:24:29,414 - app.services.ocr_service - INFO - Processing page 1/4...
+2025-11-26 12:24:42,743 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:24:42,750 - app.services.ocr_service - INFO - Page 1 OCR completed
+2025-11-26 12:24:42,754 - app.services.ocr_service - INFO - Processing page 2/4...
+2025-11-26 12:24:48,509 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:24:48,511 - app.services.ocr_service - INFO - Page 2 OCR completed
+2025-11-26 12:24:48,511 - app.services.ocr_service - INFO - Processing page 3/4...
+2025-11-26 12:24:54,449 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:24:54,450 - app.services.ocr_service - INFO - Page 3 OCR completed
+2025-11-26 12:24:54,450 - app.services.ocr_service - INFO - Processing page 4/4...
+2025-11-26 12:25:04,453 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:25:04,455 - app.services.ocr_service - INFO - Page 4 OCR completed
+2025-11-26 12:25:04,455 - app.services.ocr_service - INFO - All 4 pages processed. Filtering and grouping by check number...
+2025-11-26 12:25:04,455 - app.services.ocr_service - INFO - Filtered to 4 useful pages (removed 0 useless pages)
+2025-11-26 12:25:04,455 - app.services.ocr_service - INFO - Grouped into 2 check group(s)
+2025-11-26 12:25:04,456 - app.routes.upload - INFO - PDF processing complete. Found 2 check group(s)
+2025-11-26 12:25:04,458 - app.services.matching_service - WARNING - SuiteQL service initialization failed: NETSUITE_ACCESS_TOKEN not provided and not found in environment variables. Please set NETSUITE_ACCESS_TOKEN in your .env file or pass it to the constructor.. Will use CSV only.
+2025-11-26 12:25:04,458 - app.services.matching_service - INFO - CSV invoice service initialized successfully (as fallback)
+2025-11-26 12:25:04,459 - app.routes.upload - INFO - Processing check group 1/2: Check #14607
+2025-11-26 12:25:04,459 - app.routes.upload - INFO - Finding invoice matches for check #14607...
+2025-11-26 12:25:05,172 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315269
+2025-11-26 12:25:05,213 - app.services.matching_service - INFO - Found 1 invoices in CSV for All-Ways
+2025-11-26 12:25:05,255 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315269
+2025-11-26 12:25:05,295 - app.services.matching_service - INFO - Found 1 invoices in CSV for uoc-1977
+2025-11-26 12:25:08,208 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer All-Ways Forwarding
+2025-11-26 12:25:08,251 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315269
+2025-11-26 12:25:08,291 - app.services.matching_service - INFO - Found 1 invoices in CSV for All-Ways
+2025-11-26 12:25:08,333 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315269
+2025-11-26 12:25:08,373 - app.services.matching_service - INFO - Found 1 invoices in CSV for uoc-1977
+2025-11-26 12:25:08,373 - app.routes.upload - INFO - Found 0 matches for check #14607
+2025-11-26 12:25:08,374 - app.routes.upload - INFO - Processing check group 2/2: Check #287436
+2025-11-26 12:25:08,374 - app.routes.upload - INFO - Finding invoice matches for check #287436...
+2025-11-26 12:25:08,415 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315267
+2025-11-26 12:25:08,457 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315268
+2025-11-26 12:25:11,202 - app.services.matching_service - INFO - Found 50 invoices in CSV for customer A&E CAGE COMPANY
+2025-11-26 12:25:11,244 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315267
+2025-11-26 12:25:11,285 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315268
+2025-11-26 12:25:11,285 - app.routes.upload - INFO - Found 0 matches for check #287436
+2025-11-26 12:25:11,285 - app.routes.upload - INFO - PDF processing complete. Total time: 42.14s, 2 check(s), 4 page(s)
+Loaded .env from: /Users/pmcelroy/Documents/development/automated-cash-app/.env
+Using Token-Based Authentication (TBA)
+INFO:     127.0.0.1:52710 - "POST /api/upload/pdf HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/csv_invoice_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67281]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67383]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/csv_invoice_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67383]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67417]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/csv_invoice_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67417]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67443]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/csv_invoice_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67443]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67445]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/csv_invoice_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67445]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67456]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/csv_invoice_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67456]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67457]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/csv_invoice_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67457]
+/Users/pmcelroy/Documents/development/automated-cash-app/backend/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [67458]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-11-26 12:36:05,300 - app.routes.upload - INFO - Starting PDF upload processing for file: pages.pdf
+2025-11-26 12:36:05,300 - app.routes.upload - INFO - PDF file read: 2510903 bytes
+2025-11-26 12:36:05,328 - app.routes.upload - INFO - Processing PDF pages and grouping by check...
+2025-11-26 12:36:05,328 - app.services.ocr_service - INFO - Converting PDF to images...
+2025-11-26 12:36:05,773 - app.services.ocr_service - INFO - PDF converted to 4 page(s)
+2025-11-26 12:36:05,773 - app.services.ocr_service - INFO - Processing page 1/4...
+2025-11-26 12:36:13,464 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:36:13,475 - app.services.ocr_service - INFO - Page 1 OCR completed
+2025-11-26 12:36:13,482 - app.services.ocr_service - INFO - Processing page 2/4...
+2025-11-26 12:36:17,849 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:36:17,851 - app.services.ocr_service - INFO - Page 2 OCR completed
+2025-11-26 12:36:17,852 - app.services.ocr_service - INFO - Processing page 3/4...
+2025-11-26 12:36:21,020 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:36:21,023 - app.services.ocr_service - INFO - Page 3 OCR completed
+2025-11-26 12:36:21,025 - app.services.ocr_service - INFO - Processing page 4/4...
+2025-11-26 12:36:28,006 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:36:28,008 - app.services.ocr_service - INFO - Page 4 OCR completed
+2025-11-26 12:36:28,009 - app.services.ocr_service - INFO - All 4 pages processed. Filtering and grouping by check number...
+2025-11-26 12:36:28,009 - app.services.ocr_service - INFO - Filtered to 3 useful pages (removed 1 useless pages)
+2025-11-26 12:36:28,010 - app.services.ocr_service - INFO - Grouped into 2 check group(s)
+2025-11-26 12:36:28,010 - app.routes.upload - INFO - PDF processing complete. Found 2 check group(s)
+2025-11-26 12:36:28,012 - app.services.matching_service - INFO - SuiteQL invoice service initialized successfully
+2025-11-26 12:36:28,012 - app.services.matching_service - INFO - CSV invoice service initialized successfully (as fallback)
+2025-11-26 12:36:28,012 - app.routes.upload - INFO - Processing check group 1/2: Check #14607
+2025-11-26 12:36:28,012 - app.routes.upload - INFO - Finding invoice matches for check #14607...
+2025-11-26 12:36:28,012 - app.services.suiteql_invoice_service - INFO - Fetching fresh invoice data from NetSuite...
+2025-11-26 12:36:28,012 - app.services.suiteql_invoice_service - INFO - Fetching open invoices from last 12 months via SuiteQL...
+2025-11-26 12:36:28,895 - app.services.suiteql_invoice_service - ERROR - SuiteQL query failed: 400 - {"type":"https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.1","title":"Bad Request","status":400,"o:errorDetails":[{"detail":"Invalid login attempt. For more details, see the Login Audit Trail in the NetSuite UI at Setup > Users/Roles > User Management > View Login Audit Trail.","o:errorCode":"INVALID_LOGIN"}]}
+
+2025-11-26 12:36:28,896 - app.services.suiteql_invoice_service - INFO - SuiteQL query complete. Total invoices: 0
+2025-11-26 12:36:28,897 - app.services.suiteql_invoice_service - INFO - Cached 0 invoices (TTL: 3600s)
+2025-11-26 12:36:28,900 - app.services.csv_invoice_service - INFO - CSV: Loaded 118 invoices from /Users/pmcelroy/Documents/development/automated-cash-app/backend/open_invoices_dec2024_2025.csv
+2025-11-26 12:36:28,901 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315269'
+2025-11-26 12:36:28,901 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315269
+2025-11-26 12:36:28,901 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,901 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching 'UOC-1977'
+2025-11-26 12:36:28,901 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,901 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching 'INV240315269'
+2025-11-26 12:36:28,902 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315269
+2025-11-26 12:36:28,902 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,902 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching 'ALL-WAYS'
+2025-11-26 12:36:28,902 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,906 - app.services.matching_service - INFO - Found 14 invoices in CSV for customer All-Ways Forwarding
+2025-11-26 12:36:28,907 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,907 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315269'
+2025-11-26 12:36:28,907 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315269
+2025-11-26 12:36:28,907 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,907 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching 'UOC-1977'
+2025-11-26 12:36:28,907 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,907 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching 'INV240315269'
+2025-11-26 12:36:28,907 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315269
+2025-11-26 12:36:28,907 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,907 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching 'ALL-WAYS'
+2025-11-26 12:36:28,908 - app.routes.upload - INFO - Found 1 matches for check #14607
+2025-11-26 12:36:28,908 - app.routes.upload - INFO - Processing check group 2/2: Check #287436
+2025-11-26 12:36:28,908 - app.routes.upload - INFO - Finding invoice matches for check #287436...
+2025-11-26 12:36:28,908 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,908 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315268'
+2025-11-26 12:36:28,908 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315268
+2025-11-26 12:36:28,908 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,908 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315267'
+2025-11-26 12:36:28,908 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315267
+2025-11-26 12:36:28,908 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,911 - app.services.matching_service - INFO - Found 11 invoices in CSV for customer CARGOMATIC
+2025-11-26 12:36:28,911 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,912 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315268'
+2025-11-26 12:36:28,912 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315268
+2025-11-26 12:36:28,912 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:36:28,912 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315267'
+2025-11-26 12:36:28,912 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315267
+2025-11-26 12:36:28,912 - app.routes.upload - INFO - Found 0 matches for check #287436
+2025-11-26 12:36:28,912 - app.routes.upload - INFO - PDF processing complete. Total time: 23.61s, 2 check(s), 3 page(s)
+2025-11-26 12:41:38,538 - app.routes.upload - INFO - Starting PDF upload processing for file: pages.pdf
+2025-11-26 12:41:38,539 - app.routes.upload - INFO - PDF file read: 2510903 bytes
+2025-11-26 12:41:38,563 - app.routes.upload - INFO - Processing PDF pages and grouping by check...
+2025-11-26 12:41:38,564 - app.services.ocr_service - INFO - Converting PDF to images...
+2025-11-26 12:41:39,005 - app.services.ocr_service - INFO - PDF converted to 4 page(s)
+2025-11-26 12:41:39,005 - app.services.ocr_service - INFO - Processing page 1/4...
+2025-11-26 12:41:47,036 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:41:47,049 - app.services.ocr_service - INFO - Page 1 OCR completed
+2025-11-26 12:41:47,056 - app.services.ocr_service - INFO - Processing page 2/4...
+2025-11-26 12:41:51,794 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:41:51,797 - app.services.ocr_service - INFO - Page 2 OCR completed
+2025-11-26 12:41:51,798 - app.services.ocr_service - INFO - Processing page 3/4...
+2025-11-26 12:41:58,923 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:41:58,925 - app.services.ocr_service - INFO - Page 3 OCR completed
+2025-11-26 12:41:58,926 - app.services.ocr_service - INFO - Processing page 4/4...
+2025-11-26 12:42:05,920 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-26 12:42:05,920 - app.services.ocr_service - INFO - Page 4 OCR completed
+2025-11-26 12:42:05,921 - app.services.ocr_service - INFO - All 4 pages processed. Filtering and grouping by check number...
+2025-11-26 12:42:05,921 - app.services.ocr_service - INFO - Filtered to 4 useful pages (removed 0 useless pages)
+2025-11-26 12:42:05,921 - app.services.ocr_service - INFO - Grouped into 2 check group(s)
+2025-11-26 12:42:05,921 - app.routes.upload - INFO - PDF processing complete. Found 2 check group(s)
+2025-11-26 12:42:05,922 - app.services.matching_service - INFO - SuiteQL invoice service initialized successfully
+2025-11-26 12:42:05,922 - app.services.matching_service - INFO - CSV invoice service initialized successfully (as fallback)
+2025-11-26 12:42:05,922 - app.routes.upload - INFO - Processing check group 1/2: Check #14607
+2025-11-26 12:42:05,922 - app.routes.upload - INFO - Finding invoice matches for check #14607...
+2025-11-26 12:42:05,922 - app.services.suiteql_invoice_service - INFO - Fetching fresh invoice data from NetSuite...
+2025-11-26 12:42:05,922 - app.services.suiteql_invoice_service - INFO - Fetching open invoices from last 12 months via SuiteQL...
+2025-11-26 12:42:06,547 - app.services.suiteql_invoice_service - ERROR - SuiteQL query failed: 400 - {"type":"https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.1","title":"Bad Request","status":400,"o:errorDetails":[{"detail":"Invalid login attempt. For more details, see the Login Audit Trail in the NetSuite UI at Setup > Users/Roles > User Management > View Login Audit Trail.","o:errorCode":"INVALID_LOGIN"}]}
+
+2025-11-26 12:42:06,548 - app.services.suiteql_invoice_service - INFO - SuiteQL query complete. Total invoices: 0
+2025-11-26 12:42:06,549 - app.services.suiteql_invoice_service - INFO - Cached 0 invoices (TTL: 3600s)
+2025-11-26 12:42:06,549 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'UOC-1977'
+2025-11-26 12:42:06,551 - app.services.csv_invoice_service - INFO - CSV: Loaded 118 invoices from /Users/pmcelroy/Documents/development/automated-cash-app/backend/open_invoices_dec2024_2025.csv
+2025-11-26 12:42:06,551 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching 'UOC-1977'
+2025-11-26 12:42:06,552 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,552 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching '014607'
+2025-11-26 12:42:06,552 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching '014607'
+2025-11-26 12:42:06,552 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,552 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'INV240315269'
+2025-11-26 12:42:06,552 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching 'INV240315269'
+2025-11-26 12:42:06,553 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315269
+2025-11-26 12:42:06,553 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,553 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'ALL-WAYS'
+2025-11-26 12:42:06,553 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching 'ALL-WAYS'
+2025-11-26 12:42:06,553 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,559 - app.services.matching_service - INFO - Found 14 invoices in CSV for customer All-Ways Forwarding
+2025-11-26 12:42:06,562 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,562 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'UOC-1977'
+2025-11-26 12:42:06,563 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching 'UOC-1977'
+2025-11-26 12:42:06,563 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,563 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching '014607'
+2025-11-26 12:42:06,563 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching '014607'
+2025-11-26 12:42:06,563 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,563 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'INV240315269'
+2025-11-26 12:42:06,563 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching 'INV240315269'
+2025-11-26 12:42:06,563 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315269
+2025-11-26 12:42:06,563 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,563 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'ALL-WAYS'
+2025-11-26 12:42:06,564 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching 'ALL-WAYS'
+2025-11-26 12:42:06,564 - app.routes.upload - INFO - Found 1 matches for check #14607
+2025-11-26 12:42:06,564 - app.routes.upload - INFO - Processing check group 2/2: Check #287436
+2025-11-26 12:42:06,564 - app.routes.upload - INFO - Finding invoice matches for check #287436...
+2025-11-26 12:42:06,564 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,564 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'INV240315267'
+2025-11-26 12:42:06,564 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching 'INV240315267'
+2025-11-26 12:42:06,564 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315267
+2025-11-26 12:42:06,564 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,564 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'INV240315268'
+2025-11-26 12:42:06,565 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching 'INV240315268'
+2025-11-26 12:42:06,565 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315268
+2025-11-26 12:42:06,565 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,565 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching '287436'
+2025-11-26 12:42:06,565 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching '287436'
+2025-11-26 12:42:06,565 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,565 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching '240315268'
+2025-11-26 12:42:06,565 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315268'
+2025-11-26 12:42:06,565 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315268
+2025-11-26 12:42:06,565 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,565 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching '240315267'
+2025-11-26 12:42:06,566 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315267'
+2025-11-26 12:42:06,566 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315267
+2025-11-26 12:42:06,566 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,569 - app.services.matching_service - INFO - Found 8 invoices in CSV for customer A&E CAGE COMPANY
+2025-11-26 12:42:06,570 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,570 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'INV240315267'
+2025-11-26 12:42:06,570 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching 'INV240315267'
+2025-11-26 12:42:06,570 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315267
+2025-11-26 12:42:06,570 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,570 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching 'INV240315268'
+2025-11-26 12:42:06,570 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching 'INV240315268'
+2025-11-26 12:42:06,570 - app.services.matching_service - INFO - Found 1 invoices in CSV for INV240315268
+2025-11-26 12:42:06,570 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,570 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching '287436'
+2025-11-26 12:42:06,570 - app.services.csv_invoice_service - INFO - CSV: Found 0 invoices matching '287436'
+2025-11-26 12:42:06,570 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,570 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching '240315268'
+2025-11-26 12:42:06,571 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315268'
+2025-11-26 12:42:06,571 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315268
+2025-11-26 12:42:06,571 - app.services.suiteql_invoice_service - INFO - Using cached invoice data
+2025-11-26 12:42:06,571 - app.services.suiteql_invoice_service - INFO - SuiteQL: Found 0 invoices matching '240315267'
+2025-11-26 12:42:06,571 - app.services.csv_invoice_service - INFO - CSV: Found 1 invoices matching '240315267'
+2025-11-26 12:42:06,571 - app.services.matching_service - INFO - Found 1 invoices in CSV for 240315267
+2025-11-26 12:42:06,571 - app.routes.upload - INFO - Found 2 matches for check #287436
+2025-11-26 12:42:06,571 - app.routes.upload - INFO - PDF processing complete. Total time: 28.03s, 2 check(s), 4 page(s)

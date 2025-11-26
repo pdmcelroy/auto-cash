@@ -10,3 +10,4 @@ mkdir -p logs
 # Run uvicorn with logs going to both terminal and file
 uvicorn app.main:app --reload --port 8000 --log-level info 2>&1 | tee logs/backend.log
 
+
