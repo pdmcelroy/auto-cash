@@ -43,3 +43,10 @@ class FileUploadResponse(BaseModel):
     file_type: str
     message: str
 
+
+class BatchUploadResponse(BaseModel):
+    """Response containing multiple processed checks/remittances"""
+    results: List[InvoiceSearchResponse]  # One result per file
+    total_processing_time: float
+    total_files: int
+

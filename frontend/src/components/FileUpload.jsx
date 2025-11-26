@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-const FileUpload = ({ onCheckUpload, onRemittanceUpload, onBothUpload, loading }) => {
+const FileUpload = ({ onCheckUpload, onRemittanceUpload, onBothUpload, onBatchUpload, loading }) => {
   const [checkFile, setCheckFile] = useState(null);
   const [remittanceFile, setRemittanceFile] = useState(null);
+  const [batchFiles, setBatchFiles] = useState([]);
 
   const onCheckDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length > 0) {
@@ -71,6 +72,25 @@ const FileUpload = ({ onCheckUpload, onRemittanceUpload, onBothUpload, loading }
     disabled: loading
   });
 
+  const onBatchDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length > 0) {
+      setBatchFiles(acceptedFiles);
+      if (onBatchUpload) {
+        onBatchUpload(acceptedFiles);
+      }
+    }
+  }, [onBatchUpload]);
+
+  const batchDropzone = useDropzone({
+    onDrop: onBatchDrop,
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.bmp'],
+      'application/pdf': ['.pdf']
+    },
+    multiple: true,
+    disabled: loading
+  });
+
   const clearFiles = () => {
     setCheckFile(null);
     setRemittanceFile(null);
@@ -123,6 +143,27 @@ const FileUpload = ({ onCheckUpload, onRemittanceUpload, onBothUpload, loading }
               </div>
             ) : (
               <p>Drag & drop both files here (image + PDF), or click to select</p>
+            )}
+          </div>
+        </div>
+
+        <div className="upload-section">
+          <h3>Batch Upload (Multiple Files)</h3>
+          <p className="upload-hint">Upload multiple checks/remittances to process separately</p>
+          <div {...batchDropzone.getRootProps()} className={`dropzone ${batchDropzone.isDragActive ? 'active' : ''}`}>
+            <input {...batchDropzone.getInputProps()} />
+            {batchFiles.length > 0 ? (
+              <div className="file-info">
+                <p>✓ {batchFiles.length} file(s) selected:</p>
+                <ul className="file-list">
+                  {batchFiles.map((file, idx) => (
+                    <li key={idx}>{file.name}</li>
+                  ))}
+                </ul>
+                <button onClick={(e) => { e.stopPropagation(); setBatchFiles([]); }}>Clear All</button>
+              </div>
+            ) : (
+              <p>Drag & drop multiple files here (images and/or PDFs), or click to select</p>
             )}
           </div>
         </div>

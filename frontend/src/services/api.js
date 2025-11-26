@@ -60,3 +60,17 @@ export const getInvoice = async (invoiceId) => {
   return response.data;
 };
 
+export const uploadBatch = async (files) => {
+  const formData = new FormData();
+  files.forEach((file) => {
+    formData.append('files', file);
+  });
+  
+  const response = await api.post('/api/upload/batch', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+

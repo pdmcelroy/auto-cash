@@ -7,8 +7,8 @@ from fastapi.responses import JSONResponse
 import time
 from app.services.ocr_service import OCRService
 from app.services.matching_service import MatchingService
-from app.models.schemas import OCRResult, InvoiceSearchResponse
-from typing import Optional
+from app.models.schemas import OCRResult, InvoiceSearchResponse, BatchUploadResponse
+from typing import Optional, List
 
 logger = logging.getLogger(__name__)
 
@@ -247,4 +247,92 @@ async def upload_both(
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing files: {str(e)}")
+
+
+@router.post("/batch", response_model=BatchUploadResponse)
+async def upload_batch(
+    files: List[UploadFile] = File(...)
+):
+    """Upload and process multiple check images and/or remittance PDFs separately"""
+    if not files or len(files) == 0:
+        raise HTTPException(status_code=400, detail="At least one file must be provided")
+    
+    try:
+        start_time = time.time()
+        results = []
+        
+        ocr_service = get_ocr_service()
+        matching_service = get_matching_service()
+        
+        # Process each file separately
+        for file in files:
+            try:
+                file_start_time = time.time()
+                file_bytes = await file.read()
+                
+                # Determine file type and process accordingly
+                if file.content_type and file.content_type.startswith("image/"):
+                    # Process as check image
+                    ocr_data = ocr_service.process_check_image(file_bytes)
+                    ocr_result = OCRResult(
+                        check_number=ocr_data.get("check_number"),
+                        amount=ocr_data.get("amount"),
+                        date=ocr_data.get("date"),
+                        payor_name=ocr_data.get("payor_name"),
+                        payee_name=ocr_data.get("payee_name"),
+                        invoice_numbers=ocr_data.get("invoice_numbers", []),
+                        customer_name=ocr_data.get("payor_name"),
+                        raw_text=ocr_data.get("raw_text", ""),
+                        confidence=1.0,
+                        extracted_fields=ocr_data
+                    )
+                elif file.content_type == "application/pdf":
+                    # Process as remittance PDF
+                    ocr_data = ocr_service.process_remittance_pdf(file_bytes)
+                    ocr_result = OCRResult(
+                        check_number=ocr_data.get("check_number"),
+                        amount=ocr_data.get("amount"),
+                        date=ocr_data.get("date"),
+                        payor_name=ocr_data.get("customer_name"),
+                        invoice_numbers=ocr_data.get("invoice_numbers", []),
+                        customer_name=ocr_data.get("customer_name"),
+                        raw_text=ocr_data.get("raw_text", ""),
+                        confidence=1.0,
+                        extracted_fields=ocr_data
+                    )
+                else:
+                    logger.warning(f"Skipping file {file.filename}: unsupported content type {file.content_type}")
+                    continue
+                
+                # Find matching invoices for this file
+                matches = matching_service.find_matches(ocr_result, max_results=10)
+                
+                file_processing_time = time.time() - file_start_time
+                
+                results.append(InvoiceSearchResponse(
+                    ocr_result=ocr_result,
+                    matches=matches,
+                    processing_time=file_processing_time
+                ))
+                
+            except Exception as e:
+                logger.error(f"Error processing file {file.filename}: {e}", exc_info=True)
+                # Continue processing other files even if one fails
+                continue
+        
+        total_processing_time = time.time() - start_time
+        
+        if not results:
+            raise HTTPException(status_code=500, detail="Failed to process any files")
+        
+        return BatchUploadResponse(
+            results=results,
+            total_processing_time=total_processing_time,
+            total_files=len(results)
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing batch: {str(e)}")
 

@@ -3,7 +3,7 @@ import FileUpload from './components/FileUpload';
 import OCRResults from './components/OCRResults';
 import InvoiceSuggestions from './components/InvoiceSuggestions';
 import ReviewPanel from './components/ReviewPanel';
-import { uploadCheck, uploadRemittance, uploadBoth } from './services/api';
+import { uploadCheck, uploadRemittance, uploadBoth, uploadBatch } from './services/api';
 import './App.css';
 
 function App() {
@@ -13,6 +13,7 @@ function App() {
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [error, setError] = useState(null);
   const [processingTime, setProcessingTime] = useState(null);
+  const [batchResults, setBatchResults] = useState([]); // Array of {checkNumber, ocrResult, matches}
 
   const handleCheckUpload = async (file) => {
     setLoading(true);
@@ -65,6 +66,7 @@ function App() {
       setOcrResult(null);
       setMatches([]);
       setSelectedInvoices([]);
+      setBatchResults([]);
 
     try {
       const response = await uploadBoth(checkFile, remittanceFile);
@@ -79,12 +81,64 @@ function App() {
     }
   };
 
+  const handleBatchUpload = async (files) => {
+    if (!files || files.length === 0) {
+      setError('Please upload at least one file');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setOcrResult(null);
+    setMatches([]);
+    setSelectedInvoices([]);
+    setBatchResults([]);
+
+    try {
+      const response = await uploadBatch(files);
+      
+      // Process batch results - group by check number
+      const processedResults = response.results.map((result, idx) => ({
+        id: result.ocr_result.check_number || `file-${idx}`,
+        checkNumber: result.ocr_result.check_number || `File ${idx + 1}`,
+        ocrResult: result.ocr_result,
+        matches: result.matches,
+        processingTime: result.processing_time,
+        filename: files[idx]?.name || `File ${idx + 1}`
+      }));
+      
+      setBatchResults(processedResults);
+      setProcessingTime(response.total_processing_time);
+    } catch (err) {
+      setError(err.response?.data?.detail || err.message || 'Failed to process batch files');
+      console.error('Error uploading batch:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSelectInvoice = (invoice) => {
     setSelectedInvoices(prev => {
-      const isSelected = prev.some(inv => inv.invoice_id === invoice.invoice_id);
+      // For batch uploads, include check number in comparison to allow same invoice for different checks
+      const invoiceKey = invoice.checkNumber 
+        ? `${invoice.invoice_id}_${invoice.checkNumber}`
+        : invoice.invoice_id;
+      
+      const isSelected = prev.some(inv => {
+        const invKey = inv.checkNumber 
+          ? `${inv.invoice_id}_${inv.checkNumber}`
+          : inv.invoice_id;
+        return invKey === invoiceKey;
+      });
+      
       if (isSelected) {
         // Remove if already selected
-        return prev.filter(inv => inv.invoice_id !== invoice.invoice_id);
+        return prev.filter(inv => {
+          const invKey = inv.checkNumber 
+            ? `${inv.invoice_id}_${inv.checkNumber}`
+            : inv.invoice_id;
+          return invKey !== invoiceKey;
+        });
       } else {
         // Add if not selected
         return [...prev, invoice];
@@ -107,9 +161,10 @@ function App() {
   };
 
   const handleReset = () => {
-      setOcrResult(null);
-      setMatches([]);
-      setSelectedInvoices([]);
+    setOcrResult(null);
+    setMatches([]);
+    setSelectedInvoices([]);
+    setBatchResults([]);
     setError(null);
     setProcessingTime(null);
   };
@@ -126,6 +181,7 @@ function App() {
           onCheckUpload={handleCheckUpload}
           onRemittanceUpload={handleRemittanceUpload}
           onBothUpload={handleBothUpload}
+          onBatchUpload={handleBatchUpload}
           loading={loading}
         />
 
@@ -141,7 +197,8 @@ function App() {
           </div>
         )}
 
-        {ocrResult && (
+        {/* Single file results */}
+        {ocrResult && !batchResults.length && (
           <div className="results-section">
             <OCRResults ocrResult={ocrResult} />
             
@@ -159,6 +216,35 @@ function App() {
               />
             )}
 
+            <button onClick={handleReset} className="reset-btn">
+              Process New Files
+            </button>
+          </div>
+        )}
+
+        {/* Batch results */}
+        {batchResults.length > 0 && (
+          <div className="batch-results-section">
+            <h2>Batch Processing Results ({batchResults.length} file(s))</h2>
+            {batchResults.map((result, idx) => (
+              <div key={result.id} className="batch-result-item">
+                <div className="batch-result-header">
+                  <h3>Check #{result.checkNumber} - {result.filename}</h3>
+                  <span className="processing-time">Processed in {result.processingTime.toFixed(2)}s</span>
+                </div>
+                <OCRResults ocrResult={result.ocrResult} />
+                <InvoiceSuggestions
+                  matches={result.matches}
+                  onSelectInvoice={(invoice) => {
+                    // Add check number context to invoice selection
+                    handleSelectInvoice({...invoice, checkNumber: result.checkNumber});
+                  }}
+                  selectedInvoiceIds={selectedInvoices
+                    .filter(inv => inv.checkNumber === result.checkNumber)
+                    .map(inv => inv.invoice_id)}
+                />
+              </div>
+            ))}
             <button onClick={handleReset} className="reset-btn">
               Process New Files
             </button>

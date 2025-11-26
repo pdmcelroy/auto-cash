@@ -596,6 +596,69 @@ body {
   box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
 }
 
+/* Batch Upload Styles */
+.upload-hint {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.file-list li {
+  padding: 5px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.batch-results-section {
+  margin-top: 30px;
+}
+
+.batch-results-section h2 {
+  margin-bottom: 20px;
+  color: #333;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.batch-result-item {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.batch-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #eee;
+}
+
+.batch-result-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.processing-time {
+  color: #666;
+  font-size: 14px;
+  font-style: italic;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .upload-options {
@@ -612,5 +675,11 @@ body {
 
   .review-actions {
     flex-direction: column;
+  }
+
+  .batch-result-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }
