@@ -66,3 +66,17 @@ build/
 *.temp
 *.bak
 
+# Test/demo media files
+page*.jpeg
+page*.jpg
+page*.png
+pages.pdf
+test_*.pdf
+demo_*.pdf
+test_*.jpeg
+test_*.jpg
+test_*.png
+demo_*.jpeg
+demo_*.jpg
+demo_*.png
+
