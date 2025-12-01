@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# CSV files
+*.csv
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Cursor agent files
+.cursor/plans/
+NETSUITE_OAUTH_IMPLEMENTATION_GUIDE.md
+JWT_AUTH_SETUP.md
+README_LOGS.md
+
+# Local test/demo scripts
+test_*.py
+demo_*.py
+search_*.py
+get_*.py
+apply_*.py
+create_pdf_from_images.py
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
